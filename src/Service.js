@@ -68,7 +68,12 @@ export const Service = {
   getTenants: async () => {
     return new Promise((resolve, reject) => {
       setTimeout(function () {
-        networkError() ? reject("Network Error!") : resolve([...tenants]);
+        if (networkError()) {
+          alert("Please try again");
+          reject("Network Error!");
+        } else {
+          resolve([...tenants]);
+        }
       }, randomResponseTime());
     });
   },
@@ -79,6 +84,7 @@ export const Service = {
           reject("Invalid payload");
         }
         if (networkError()) {
+          alert("Please try again");
           reject("Network Error!");
         } else {
           tenant.id = nextId++;
@@ -92,6 +98,7 @@ export const Service = {
     return new Promise((resolve, reject) => {
       setTimeout(function () {
         if (networkError()) {
+          alert("Please try again");
           reject("Network Error!");
         } else {
           deleteTenant(id);
