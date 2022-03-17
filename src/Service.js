@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const networkError = () => Math.floor(Math.random() * Math.floor(5)) === 0;
 
 const randomResponseTime = () => Math.floor(Math.random() * Math.floor(1000));
@@ -50,7 +52,7 @@ let tenants = [
 const valid = (tenant) => {
   return (
     !!tenant.name &&
-    tenant.name.length <= 25 &&
+    tenant.name.length >= 25 &&
     !!tenant.paymentStatus &&
     !!tenant.leaseEndDate
   );
@@ -97,5 +99,18 @@ export const Service = {
         }
       }, randomResponseTime());
     });
+  },
+  sortPaymentLate: () => {
+    const tenantsFiltered = tenants.filter((tenants) => {
+      return tenants.paymentStatus === "LATE";
+    });
+    return tenantsFiltered;
+  },
+  sortLeaseEndDate: () => {
+    return tenants.sort(
+      (a, b) =>
+        moment(b.leaseEndDate, "YYYYMMDD").unix() -
+        moment(a.leaseEndDate, "YYYYMMDD").unix()
+    );
   },
 };
